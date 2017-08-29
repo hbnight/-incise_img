@@ -1,0 +1,322 @@
+<!DOCTYPE html5>
+<html>
+<head>
+<meta charset="UTF-8">
+<script src="http://dearus.com/webtest/js/jquery-1.9.1.js"></script>
+<title>商家信息</title>
+<style rel="stylesheet">
+    body{
+        -moz-user-select: -moz-none;
+        -khtml-user-select: none;
+        -webkit-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+    }
+    .system_admin_td_two img{max-width:100%}
+    #imgShowLogo{position:absolute;left:0;top:0;z-index:-1}
+    .upFile_left_view{margin-left:10px;color:#999}
+    .upFile_left_view_item{width:150px;height:150px;overflow:hidden;background-repeat:no-repeat;display:inline-block;margin:0 15px}
+    .upFile_left_view_item:last-child{border-radius:50%;}
+    .box_pop{width:100%;height:100%;position:absolute;background:#000;opacity:0.4}
+    .box_top,.box_left{top:0;left:0}
+    .box_bottom,.box_right{right:0;bottom:0}
+    .center{position:absolute;width:140px;height:140px;left:calc(50% - 70px);top:calc(50% - 70px);cursor:move}
+    .center_box{position:relative;width:140px;height:140px}
+    .center_control{position:absolute;width:5px;height:5px;background:#fff;border:1px solid #ccc;right:-2px;bottom:-2px;cursor:se-resize}
+</style>
+</head>
+<body >
+    <div  ondragstart="return false">
+	 	<p style="padding:5px 10px 0">
+	 		<label for="updateStoreLogo">
+	 			<span style="position:relative;overflow:hidden;cursor:pointer;display:inline-block;padding:5px;background:#D7D7D7;font-size:14px;">重新上传
+	 				<input type="file" id="updateStoreLogo" name="updateStoreLogo" accept='.BMP,.jpg,.jpeg,.png'  style="position:absolute;left:-1000px;">
+	 			</span>
+	 		</label>
+        </p>
+        <div class="upFileBox" style="padding:10px">
+        	<div class="upFile_left" style="width:450px;position:relative;height:450px;float:left;box-shadow: 0 0 1px 1px #000">
+        		<div class="box_lef box_pop"></div>
+		        <div class="box_right box_pop"></div>
+		        <div class="box_top box_pop"></div>
+		        <div class="box_bottom box_pop"></div>
+		        <div class="center">
+		            <div class="center_box">
+		                <div class="center_control"></div>
+		            </div>
+		        </div>
+        		<img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADUAAAAnCAYAAACv+ADgAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAA3FpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMy1jMDExIDY2LjE0NTY2MSwgMjAxMi8wMi8wNi0xNDo1NjoyNyAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wTU09Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9tbS8iIHhtbG5zOnN0UmVmPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvc1R5cGUvUmVzb3VyY2VSZWYjIiB4bWxuczp4bXA9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC8iIHhtcE1NOk9yaWdpbmFsRG9jdW1lbnRJRD0ieG1wLmRpZDowNDFhMDBmMy1jYzg3LTJhNDQtOTYzMC0xYTEwNGIxNDgxYTciIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6QUUzQUQ2MUZCQjREMTFFNkE3MkRBMUNGNzdBOUFCRTciIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6QUUzQUQ2MUVCQjREMTFFNkE3MkRBMUNGNzdBOUFCRTciIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENDIChXaW5kb3dzKSI+IDx4bXBNTTpEZXJpdmVkRnJvbSBzdFJlZjppbnN0YW5jZUlEPSJ4bXAuaWlkOjEyNjkyNjQ3LTc4OGUtNWI0Yi1hNjFiLTAzMzE2YThiZGQzNiIgc3RSZWY6ZG9jdW1lbnRJRD0ieG1wLmRpZDowNDFhMDBmMy1jYzg3LTJhNDQtOTYzMC0xYTEwNGIxNDgxYTciLz4gPC9yZGY6RGVzY3JpcHRpb24+IDwvcmRmOlJERj4gPC94OnhtcG1ldGE+IDw/eHBhY2tldCBlbmQ9InIiPz6iSq8rAAAEPElEQVR42uyZaWwNURTHX4uprVRibe1tKOIRFNWkPthVFLFHxF6JLcQHxL58aHxRrS+l4QNCU0ttIVGxBbEb+y6hDYoQ0vJon/+Znpe+Tu/r3Dt9T2mc5Ddpbu/cmf/ce8+557wgt9vtqG4W7KiGVi1F1ZTqpWuq43YE8SAGOEFb0BDkgfvgHrgFzoH3lqM5XUoPD5LaU3KiSMQEMBK0lHw+PVwHB0EmePQ3iKoPZoC5oJMfVs4VkAqygMuuKLt7ilQuAi9Aip8EkfUFe8BLMI+f80ccRRx4CLaAJgrL7C34Jtk/HKTxchwfSFHkVDby5m4v0f8ML812/MVbgFBesrE8Vq7FGHTvfiz/Q6C5v/dUKK/zwRJj3gaLwVmJvnXAErAc1LPo+xFMxP46XXlRutYK1+Ogq8RLpvFL/lRcMdEgG3Sw6FcEVoJkiHPbE6VrkbjmgDYSL5YMllXCSTTlpR0t0TcDJEFYkZooXevI+yJc4iH0lUezQxDFr+GAZvwHL88sDsSioH2N956VHTPiotNVICdK12hmLkoG0c/8dd+Z2ukUsQv0F9xTCDaDdaDY9L+FHCZkjPZXollYeVG6Rm76EoiSHJhebK2pLYo/SjOLe3eDqaYZJk/5FLRWEDYSwgrFLl3XauN6VEGQg2fDHCb2SQgimwJmmdro+LBX4fkDjefpWg1fcYq8Vx+FAe+AV6a2UaCnwhhrBO+Rrehk6Ly5DcKCyorStem4zlQc7IKgLVFxjAg+zXsbOYvviuMkgU2lonQtmmdJ1V758GCq1lkQj97YGGcZtEzyzNQOUNfGIAUBzPUKbdxDyy/VIyrE5oPDBG2PbYzzQNDWwOY7pXtEUeDMtzFAex+BWMVyeQ+ZU5sIG+9zBKwK5iSM1u8Q8EVxkFhB22FwQ2GM9YIA3Fu61FBq58EkOjoFe2WXVDMYobhPuggSxGLjNF3+hOEr+G4XtI9TFHSXA3BB+TjldNEpYGyZVNraFgjanvEsXvBxD7nrDWCa4LzYkE8ZskZFnEF49y9WZ78hXAyR8YiUZnTjbNhXQSbB60BLK+JABQkinQmXSgq6CYZCUL7sKT2e90cjycHjbARMs/XnVKeGRN9TxjJ1ur7Kp/NOF228fuC5xAN6GGm3zUIJW3dwSFLQVmP/CwTJZr6NucIjk8rnGB5IPTwksNMIs+hH+2YOxGRWrvDidH3AdRhYDX5Z9B7gKKnAzpacNUovdnJmYCUo2/C2FoJUCi+ev8ghpHMcsbI8dgiU7zxxlJSXQzio9uDZoY9Vy2Kc68ZJ3uk64e9qknl2qfS1gktYgTA3V6NSjFNCBUUWf4nyrgNOBvMFqYNde+0oqalnlAkRVfQDAaUOY7jAEqNwxHFzIeYk76srwuJNFf7q4bFQFtaL63h06I3kEtg3Dr5XwWXmk4SzCoCof8z+/zz6X1QV2m8BBgAgKzAjHv3dJAAAAABJRU5ErkJggg==" id="imgShowLogo">
+        	</div>
+        	<div class="upFile_left_view" style="width:400px;height:200px;text-align:center;float:left">
+        		<h4 style="padding-left:30px;margin-bottom:120px;text-align:left">预览</h4>
+        		<div class="upFile_left_view_item"></div>
+        		<div class="upFile_left_view_item"></div>
+        	</div>
+        	<div style="clear:both"></div>
+        </div>
+        <div class="perfect_information_pop_button perfect_information_pop_button_wechat">
+            <a class="perfect_information_pop_button_sure save_verify_click" onclick="upFile_img()" href="javascript:void(0);">保存</a>
+        </div>
+	</div>
+    <script type="text/javascript">
+       "use strict"; 
+        $(function() {
+            $(".upFile_left_view_item").css({
+                "background-image": "url(" + $("#imgShowLogo").prop("src") + ")"
+            });
+            resize_img();
+        });
+
+        function resize_img() {
+            $("#imgShowLogo").removeAttr("style");
+            $("#imgShowLogo").outerHeight(false) > $("#imgShowLogo").outerWidth(false) ? (function() {
+                $("#imgShowLogo").css("height", "100%");
+                $("#imgShowLogo").css({
+                    "left": "50%",
+                    "margin-left": -$("#imgShowLogo").outerWidth(false) / 2 + "px"
+                });
+            })() : (function() {
+                $("#imgShowLogo").css("width", "100%");
+                $("#imgShowLogo").css({
+                    "top": "50%",
+                    "margin-top": -$("#imgShowLogo").outerHeight(false) / 2 + "px"
+                })
+            })();
+
+            clac();
+        }
+
+        var input = document.getElementById("updateStoreLogo");
+        input.addEventListener('change', readFile, false);
+        function readFile() {
+            var file = this.files[0];
+            //这里我们判断下类型如果不是图片就返回 去掉就可以上传任意文件
+            if (!/image\/\w+/.test(file.type)) {
+                return false;
+            }
+            var reader = new FileReader();
+            reader.readAsDataURL(file);
+            reader.onload = function(e) {
+                document.getElementById("imgShowLogo").src = this.result;
+                console.log(this.result)
+                
+                $(".upFile_left_view_item").css({
+                    "background-image": "url(" + this.result + ")"
+                });
+                setTimeout(function() {
+                    $("#imgShowLogo").removeAttr("style");
+                    $("#imgShowLogo").outerHeight(false) > $("#imgShowLogo").outerWidth(false) ? (function() {
+                        $("#imgShowLogo").css("height", "100%");
+                        $("#imgShowLogo").css({
+                            "left": "50%",
+                            "margin-left": -$("#imgShowLogo").outerWidth(false) / 2 + "px"
+                        });
+                    })() : (function() {
+                        $("#imgShowLogo").css("width", "100%");
+                        $("#imgShowLogo").css({
+                            "top": "50%",
+                            "margin-top": -$("#imgShowLogo").outerHeight(false) / 2 + "px"
+                        })
+                    })();
+                    clac();
+                },
+                0);
+            }
+
+        }
+
+        function upFile_img() {
+            $("#ImgCanvas").remove();
+            var can = document.createElement("canvas");
+            can.width = $(".upFile_left_view_item:first").outerWidth(false);
+            can.height = $(".upFile_left_view_item:first").outerHeight(false);
+            can.id = "ImgCanvas";
+            // can.style.display="none";
+            document.getElementsByTagName("body")[0].appendChild(can);
+            var canvas = document.getElementById("ImgCanvas");
+            var Img = new Image();
+            Img.src = $("#imgShowLogo").prop("src");
+            var ctx = canvas.getContext("2d");
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            var bgSize = $(".upFile_left_view_item").css("background-size").replace(/[^\d\.\s]\-/g, "").split(' ')
+            var bgPosition = $(".upFile_left_view_item").css("background-position").replace(/[^\d\.\s\-]/g, "").split(' ');
+            ctx.drawImage(Img, parseInt(bgPosition[0]), parseInt(bgPosition[1]), parseInt(bgSize[0]), parseInt(bgSize[1]));
+            downImg("测试");
+
+        }
+
+        //canvas转图片并下载
+        function downImg(filename) {
+            // 图片导出为 png 格式
+            var type = 'png';
+            var canvas = document.getElementById("ImgCanvas");
+            var imgData = canvas.toDataURL(type);
+            var _fixType = function(type) {
+                type = type.toLowerCase().replace(/jpg/i, 'jpeg');
+                var r = type.match(/png|jpeg|bmp|gif/)[0];
+                return 'image/' + r;
+            };
+
+            // 加工image data，替换mime type
+            imgData = imgData.replace(_fixType(type), 'image/octet-stream');
+            
+
+            var saveFile = function(data, filename) {
+                var save_link = document.createElementNS('http://www.w3.org/1999/xhtml', 'a');
+                save_link.href = data;
+                save_link.download = filename;
+                var event = document.createEvent('MouseEvents');
+                event.initMouseEvent('click', true, false, window, 0, 0, 0, 0, 0, false, false, false, false, 0, null);
+                save_link.dispatchEvent(event);
+            };
+
+            // 下载后的问题名
+            var filename = filename + '.' + type;
+            // download
+            saveFile(imgData, filename);
+
+        }
+
+        // 根据"透明区域"设置阴影
+        function clac() {
+            var W = $(".center").outerWidth(false),
+            H = $(".center").outerHeight(false),
+            X = $(".center").position().left,
+            Y = $(".center").position().top;
+            $(".box_lef").css({
+                "top": Y,
+                "width": X,
+                "height": H
+            })
+
+            $(".box_top").css({
+                "height": Y
+            })
+
+            $(".box_right").css({
+                "top": Y,
+                "width": $(".upFile_left").outerWidth(false) - X - W,
+                "height": H
+            })
+
+            $(".box_bottom").css({
+                "height": $(".upFile_left").outerHeight(false) - Y - H
+            })
+            //  根据"透明区域"显示的内容   
+            resetPosition()
+        }
+
+        var boxMove = false,
+        startX, startY, objX, objY, startW, startH, resize = false;
+        //  移动区域移动事件
+        $(".center_box").on({
+            "mousedown": function(e) {
+                //  取值，不缀叙
+                boxMove = true;
+                startX = e.pageX;
+                startY = e.pageY;
+                objX = $(".center").position().left;
+                objY = $(".center").position().top;
+            },
+            "mouseup": function() {
+                boxMove = false;
+                resize = false;
+            }
+        })
+
+        //  改变大小控制点
+        $(".center_control").on({
+            "mousedown": function(e) {
+                e.stopPropagation();
+
+                //  取值，不缀叙
+                resize = true;
+                startX = e.pageX;
+                startY = e.pageY;
+                startW = $(".center").outerWidth(false);
+                startH = $(".center").outerHeight(false);
+            },
+            "mouseup": function() {
+                resize = false;
+                resize = false;
+            }
+        })
+
+        //  选择区域移动事件
+        $(".upFile_left").on({
+            "mousemove": function(e) {
+                // 如果改变大小的值判断不为真则返回;
+                if (!resize) return;
+                var w = startW + e.pageX - startX;
+                var h = startH + e.pageY - startY;
+                var num = w > h ? w: h;
+                num = num < 5 ? 5 : num;
+                num = num > $(".upFile_left").outerWidth(false) - $(".center").position().left ? $(".upFile_left").outerWidth(false) - $(".center").position().left: num;
+                num = num > $(".upFile_left").outerHeight(false) - $(".center").position().top ? $(".upFile_left").outerHeight(false) - $(".center").position().top: num;
+                $(".center,.center_box").css({
+                    "width": num,
+                    "height": num
+                });
+                clac();
+            },
+            "mouseup": function() {
+                boxMove = false;
+                resize = false;
+            }
+        })
+
+        // document事件。
+        $(document).on({
+            "mousemove": function(e) {
+                if (!boxMove) return //   如果判断移动不为真,则返回
+                // 实时设置位置
+                var left = objX - startX + e.pageX;
+                var top = objY - startY + e.pageY;
+
+                // 限制不允许超过边界
+                left = left < 0 ? 0 : left;
+                left = left > $(".upFile_left").outerWidth(false) - $(".center").outerWidth(false) ? $(".upFile_left").outerWidth(false) - $(".center").outerWidth(false) : left;
+                top = top < 0 ? 0 : top;
+                top = top > $(".upFile_left").outerHeight(false) - $(".center").outerHeight(false) ? $(".upFile_left").outerHeight(false) - $(".center").outerHeight(false) : top;
+
+                // 将值设置到"透明"区域    
+                $(".center").css({
+                    "left": left,
+                    "top": top
+                });
+                clac();
+            },
+
+            // 任一区域松开鼠标时设置移动为false  
+            "mouseup": function() {
+                boxMove = false;
+                resize = false;
+            }
+        })
+
+        // 根据选择区域设置显示区域的内容   
+        function resetPosition() {
+
+            var sealX = $(".upFile_left_view_item").outerWidth(false) / $(".center").outerWidth();
+            var sealY = $(".upFile_left_view_item").outerHeight(false) / $(".center").outerHeight();
+            var X, Y;
+            if ($("#imgShowLogo").outerWidth(false) > $("#imgShowLogo").outerHeight(false)) {
+                X = $(".center").position().left,
+                Y = $(".center").position().top - ($("#imgShowLogo").position().top - ($("#imgShowLogo").outerHeight(false) / 2));
+            } else if ($("#imgShowLogo").outerWidth(false) < $("#imgShowLogo").outerHeight(false)) {
+                X = $(".center").position().left - ($("#imgShowLogo").position().left - ($("#imgShowLogo").outerWidth(false) / 2)),
+                Y = $(".center").position().top;
+            } else {
+                X = $(".center").position().left,
+                Y = $(".center").position().top;
+            }
+
+            $(".upFile_left_view_item").css({
+                "background-position-x": -X * sealX + "px",
+                "background-position-Y": -Y * sealX + "px",
+                "background-size": $("#imgShowLogo").outerWidth(false) * sealX + "px " + $("#imgShowLogo").outerHeight(false) * sealY + "px"
+            })
+        }
+    </script>
+</body>
+</html>
